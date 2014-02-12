@@ -4,13 +4,13 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+#.configure(VAGRANTFILE:API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "base"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
@@ -103,25 +103,57 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # HTTP instead of HTTPS depending on your configuration. Also change the
   # validation key to validation.pem.
   #
-   config.vm.provision :chef_client do |chef|
-     chef.chef_server_url = "https://api.opscode.com/organizations/florakarniav"
-     chef.validation_key_path = "./.chef/florakarniav-validator.pem"
-    chef.validation_client_name = "florakarniav-validator"
-    chef.node_name = "flora_vm"
-
-   end
-  #
-  # If you're using the Opscode platform, your validator client is
+ #
+ # If you're using the Opscode platform, your validator client is
   # ORGNAME-validator, replacing ORGNAME with your organization name.
   #
   # If you have your own Chef Server, the default validation client name is
   # chef-validator, unless you changed the configuration.
   #
   #   chef.validation_client_name = "ORGNAME-validator"
-config.vm.box = "opscode-ubuntu-12.04"
-config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
+
+
+#config.vm.define :tomcat do |tomcat_config|
+
+Vagrant::Config.run do |config|
+
+ config.vm.define :tomcat do |tomcat_config|
+
+  tomcat_config.vm.box = "opscode-ubuntu-12.04"
+  tomcat_config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
+  tomcat_config.vm.network :hostonly, "10.0.0.100"
+#"192.168.1.10"
+  tomcat_config.vm.forward_port 80, 8888
+
+
+  tomcat_config.vm.provision :chef_client do |chef|
+    chef.chef_server_url = "https://api.opscode.com/organizations/florakarniav"
+    chef.validation_key_path = "./.chef/florakarniav-validator.pem"
+    chef.validation_client_name = "florakarniav-validator"
+    chef.node_name = "flora_vm"
+
+  end
+
+
+ end
+
+ config.vm.define :sql do |sql_config|
+
+
+  sql_config.vm.box = "opscode-ubuntu-12.04"
+  sql_config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
+  sql_config.vm.network :hostonly, "192.168.1.20"
+  sql_config.vm.forward_port 27017, 27018
+
+  sql_config.vm.provision :chef_client do |chef|
+
+    chef.chef_server_url = "https://api.opscode.com/organizations/florakarniav"
+    chef.validation_key_path = "./.chef/florakarniav-validator.pem"
+    chef.validation_client_name = "florakarniav-validator"
+    chef.node_name = "flora_vm1"
+
+  end
+
+ end
 
 end
-
-
-

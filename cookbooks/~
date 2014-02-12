@@ -1,0 +1,23 @@
+{
+  "name": "flora_vm",
+  "chef_environment": "_default",
+  "normal": {
+    "omnibus_updater": {
+      "full_url": "http://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/10.04/i686/chef_11.8.0-1.ubuntu.10.04_i386.deb"
+    },
+    "tags": [
+
+    ]
+  },
+  "run_list": [
+    "recipe[omnibus_updater]",
+    "recipe[tomcat]"
+  ]
+
+override_attributes(
+  'tomcat' => {
+    'java_options' => "${JAVA_OPTS} -Xmx128M -Djava.awt.headless=true"
+  }
+)
+
+}
