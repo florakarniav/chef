@@ -16,6 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+include_attribute "java"
+
 default["tomcat"]["base_version"] = 6
 default["tomcat"]["port"] = 8080
 default["tomcat"]["proxy_port"] = nil
@@ -71,10 +73,11 @@ when "debian","ubuntu"
   default["tomcat"]["context_dir"] = "#{node["tomcat"]["config_dir"]}/Catalina/localhost"
   default["tomcat"]["webapp_dir"] = "/var/lib/tomcat#{node["tomcat"]["base_version"]}/webapps"
   #default["tomcat"]["keytool"] = "/usr/lib/jvm/default-java/bin/keytool" #this was the initial one
-  default["tomcat"]["keytool"] = "/usr/bin/keytool"
+  default["tomcat"]["keytool"] = "#{node["java"]["java_home"]}/bin/keytool"  
+  #default["tomcat"]["keytool"] = "/usr/bin/keytool"
   default["tomcat"]["lib_dir"] = "#{node["tomcat"]["home"]}/lib"
   default["tomcat"]["endorsed_dir"] = "#{node["tomcat"]["lib_dir"]}/endorsed"
-  override["tomcat"]["keytool"] = "/usr/bin/keytool" #these and the bellow added by me to fix problem
+  #override["tomcat"]["keytool"] = "/usr/bin/keytool" #these and the bellow added by me to fix problem
   #override["tomcat"]["catalina_options"] = "-DJENKINS_HOME=/usr/share/jenkins_home -Xmx512m"
 when "smartos"
   default["tomcat"]["user"] = "tomcat"

@@ -1,0 +1,2 @@
+name "mycook"
+depends "database"

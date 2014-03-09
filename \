@@ -1,0 +1,33 @@
+{
+  "name": "flora_vm0",
+  "chef_environment": "_default",
+  "normal": {
+    "tags": [
+
+    ],
+    "omnibus_updater": {
+      "full_url": "http://opscode-omnibus-packages.s3.amazonaws.com/ubuntu/12.04/x86_64/chef_11.10.4-1.ubuntu.12.04_amd64.deb"
+    },
+
+
+
+
+
+
+
+
+
+    "build_essential": {
+      "compiletime": true
+    }
+  },
+  "run_list": [
+    "recipe[apt]",
+    "recipe[omnibus_updater]",
+    "recipe[mysql::server]",
+    "recipe[mysql]",
+    "recipe[database]",
+    "recipe[passenger_apache2]",
+    "recipe[tomcat]"
+  ]
+}

@@ -5,6 +5,7 @@
 VAGRANTFILE_API_VERSION = "2"
 
 
+
 #.configure(VAGRANTFILE:API_VERSION) do |config|
   # All Vagrant configuration is done here. The most common configuration
   # options are documented and commented below. For a complete reference,
@@ -113,24 +114,67 @@ VAGRANTFILE_API_VERSION = "2"
   #   chef.validation_client_name = "ORGNAME-validator"
 
 
+
 #config.vm.define :tomcat do |tomcat_config|
 
 Vagrant::Config.run do |config|
 
+
+ #config.omnibus.chef_version = :latest
+
+ config.vm.network :hostonly, "192.168.50.50"
+
+ config.vm.host_name = "www.example.vm"
+
+  #config.vm.share_folder "v-data", "/srv/data", "../data", :nfs => true, :create => "true"
+  #config.vm.share_folder "v-site", "/srv/site", ".", :nfs => true, :create => "true"
+
+config.vm.define :mine do |mine_config|
+
+  mine_config.vm.box = "opscode-ubuntu-12.04"
+  #tomcat_config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
+  #tomcat_config.vm.provision :shell, :inline => "curl -L https://www.opscode.com/chef/install.sh | bash"
+  mine_config.vm.box_url = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box"
+  #tomcat_config.omnibus.chef_version = :latest
+  #mine_config.vm.network :hostonly, "10.0.0.100" #"192.168.1.10"
+  #mine_config.vm.forward_port 80, 8888
+
+
+  mine_config.vm.provision :chef_client do |chef|
+
+
+    chef.chef_server_url = "https://api.opscode.com/organizations/florakarniav"
+    chef.validation_key_path = "./.chef/florakarniav-validator.pem"
+    chef.validation_client_name = "florakarniav-validator"
+    chef.node_name = "flora_vmine"
+
+
+
+  end
+
+
+ end
+ 
  config.vm.define :tomcat do |tomcat_config|
 
   tomcat_config.vm.box = "opscode-ubuntu-12.04"
-  tomcat_config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
-  tomcat_config.vm.network :hostonly, "10.0.0.100"
-#"192.168.1.10"
+  #tomcat_config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
+  #tomcat_config.vm.provision :shell, :inline => "curl -L https://www.opscode.com/chef/install.sh | bash"
+  tomcat_config.vm.box_url = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box"
+  #tomcat_config.omnibus.chef_version = :latest
+  tomcat_config.vm.network :hostonly, "10.0.0.100" #"192.168.1.10"
   tomcat_config.vm.forward_port 80, 8888
 
 
   tomcat_config.vm.provision :chef_client do |chef|
+    
+    
     chef.chef_server_url = "https://api.opscode.com/organizations/florakarniav"
     chef.validation_key_path = "./.chef/florakarniav-validator.pem"
     chef.validation_client_name = "florakarniav-validator"
-    chef.node_name = "flora_vm"
+    chef.node_name = "flora_vm0"
+    
+
 
   end
 
@@ -141,8 +185,11 @@ Vagrant::Config.run do |config|
 
 
   sql_config.vm.box = "opscode-ubuntu-12.04"
-  sql_config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
-  sql_config.vm.network :hostonly, "192.168.1.20"
+  #sql_config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
+  #sql_config.vm.provision :shell, :inline => "curl -L https://www.opscode.com/chef/install.sh | bash"
+  sql_config.vm.box_url = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box"
+  #sql_config.omnibus.chef_version = :latest
+  #sql_config.vm.network :hostonly, "10.0.0.200" #"192.168.1.20"
   sql_config.vm.forward_port 27017, 27018
 
   sql_config.vm.provision :chef_client do |chef|
@@ -152,8 +199,57 @@ Vagrant::Config.run do |config|
     chef.validation_client_name = "florakarniav-validator"
     chef.node_name = "flora_vm1"
 
+
   end
 
  end
+
+
+ config.vm.define :simple do |simple_config|
+
+
+  simple_config.vm.box = "opscode-ubuntu-12.04"
+  #sql_config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
+  #sql_config.vm.provision :shell, :inline => "curl -L https://www.opscode.com/chef/install.sh | bash"
+  simple_config.vm.box_url = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box"
+  #sql_config.omnibus.chef_version = :latest
+  #simple_config.vm.network :hostonly, "10.0.0.200" #"192.168.1.20"
+  simple_config.vm.forward_port 80, 2701
+
+  simple_config.vm.provision :chef_client do |chef|
+
+    chef.chef_server_url = "https://api.opscode.com/organizations/florakarniav"
+    chef.validation_key_path = "./.chef/florakarniav-validator.pem"
+    chef.validation_client_name = "florakarniav-validator"
+    chef.node_name = "flora_vm9"
+    #chef.add_role "webserver"
+
+  end
+
+ end
+
+config.vm.define :last do |last_config|
+
+
+  last_config.vm.box = "opscode-ubuntu-12.04"
+  #sql_config.vm.box_url = "https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box"
+  #sql_config.vm.provision :shell, :inline => "curl -L https://www.opscode.com/chef/install.sh | bash"
+  last_config.vm.box_url = "https://opscode-vm.s3.amazonaws.com/vagrant/boxes/opscode-ubuntu-12.04.box"
+  #sql_config.omnibus.chef_version = :latest
+  #simple_config.vm.network :hostonly, "10.0.0.200" #"192.168.1.20"
+  #last_config.vm.forward_port 80, 2701
+
+  last_config.vm.provision :chef_client do |chef|
+
+    chef.chef_server_url = "https://api.opscode.com/organizations/florakarniav"
+    chef.validation_key_path = "./.chef/florakarniav-validator.pem"
+    chef.validation_client_name = "florakarniav-validator"
+    chef.node_name = "flora_vm00"
+    #chef.add_role "webserver"
+
+  end
+
+ end
+
 
 end
