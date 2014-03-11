@@ -1,0 +1,7 @@
+{
+"name": "nodeapps_server",
+
+"description": "node.js application server for apps",
+
+"run_list": [ "recipe[ntp]", "recipe[ubuntu]", "recipe[nodeapp]"]
+}
